@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔬 Rompehielos Científicos v2 | Prof. Steve</title>
+  <link rel="stylesheet" href="cartas.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Playfair+Display:wght@700&family=Orbitron:wght@700&family=Cinzel:wght@700&family=VT323&family=Space+Mono:wght@700&family=Special+Elite&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+<body>
+
+  <header>
+    <h1>🔬 Rompehielos Científicos</h1>
+    <p>7 barajas · Ruleta de turnos · 5 minutos de pura curiosidad — Prof. Steve · 3° Secundaria</p>
+  </header>
+
+  <!-- CONFIGURACIÓN -->
+  <div class="config-bar">
+    <label>👥 Estudiantes <input type="number" id="totalStudents" value="26" min="2" max="60"></label>
+    <span class="divider"></span>
+    <label>🏆 Equipos <input type="number" id="totalTeams" value="4" min="2" max="8"></label>
+    <span class="divider"></span>
+    <label><input type="checkbox" id="noRepeat" checked> Sin repetir</label>
+    <span class="divider"></span>
+    <button class="btn secondary" id="resetHistoryBtn">🔄 Reiniciar</button>
+  </div>
+
+
+  <!-- SELECTOR DE BARAJAS -->
+  <nav class="deck-selector" id="deckSelector">
+    <button class="deck-btn active" data-deck="observa">
+      <span class="icon">👁️</span>
+      <span class="info"><span class="title">Veo, Pienso, Pregunto</span><span class="subtitle">Observación</span></span>
+    </button>
+    <button class="deck-btn" data-deck="hipotesis">
+      <span class="icon">🤔</span>
+      <span class="info"><span class="title">¿Qué pasaría si…?</span><span class="subtitle">Hipótesis</span></span>
+    </button>
+    <button class="deck-btn" data-deck="mito">
+      <span class="icon">⚖️</span>
+      <span class="info"><span class="title">Mito o Ciencia</span><span class="subtitle">Pensamiento crítico</span></span>
+    </button>
+    <button class="deck-btn" data-deck="soyun">
+      <span class="icon">🎭</span>
+      <span class="info"><span class="title">Soy un…</span><span class="subtitle">Roleplay</span></span>
+    </button>
+    <button class="deck-btn" data-deck="conecta">
+      <span class="icon">🔗</span>
+      <span class="info"><span class="title">Conecta dos</span><span class="subtitle">Sistémico</span></span>
+    </button>
+    <button class="deck-btn" data-deck="misterio">
+      <span class="icon">🔍</span>
+      <span class="info"><span class="title">Misterio</span><span class="subtitle">¿Qué seré?</span></span>
+    </button>
+    <button class="deck-btn" data-deck="digalo">
+      <span class="icon">🤐</span>
+      <span class="info"><span class="title">Dígalo como pueda</span><span class="subtitle">¡Sin decir la palabra!</span></span>
+    </button>
+  </nav>
+
+ <main class="main-area">
+
+  <!-- ═══════════════════════════════════════════
+       ZONA IZQUIERDA: CARTA CENTRAL + CONTROLES
+       ═══════════════════════════════════════════ -->
+  <div class="card-stage">
+
+    <!-- CARTA CENTRAL -->
+    <div class="card-container" id="cardContainer">
+      <div class="card" id="card">
+        <div class="card-face card-back">
+          <div class="deck-symbol" id="deckSymbol">Α</div>
+          <i class="card-back-icon" id="deckIcon"></i>
+          <h2 class="card-back-title" id="deckTitle">Observación</h2>
+          <div class="tap-hint">Toca para revelar</div>
+        </div>
+        <div class="card-face card-front" id="cardFront">
+          <div class="card-header">
+            <span class="card-number" id="cardNumber">Α-00</span>
+            <span class="card-deck-name" id="cardDeckName">—</span>
+          </div>
+          <div class="card-icon" id="cardIcon">
+            <img id="cardIconImg" src="" alt="" loading="lazy">
+          </div>
+          <div class="card-text" id="cardText">Toca una carta del mazo para empezar.</div>
+          <div id="answerBox" class="answer-box" style="display:none"></div>
+          <div class="card-footer" id="cardFooter">⏱️ 30-60 segundos</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTROLES -->
+    <div class="controls">
+      <button class="btn" id="drawBtn">🎴 Sacar carta</button>
+      <button class="btn success hidden" id="revealBtn">🔓 Revelar respuesta</button>
+      <button class="btn secondary" id="shuffleBtn">🔀 Mezclar baraja</button>
+    </div>
+    <div class="counter" id="counter">Carta 0 de 30</div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       ZONA DERECHA: RULETA + MESA DE JUEGO
+       ═══════════════════════════════════════════ -->
+  <aside class="right-panel">
+
+    <!-- RULETA -->
+    <div class="roulette-panel">
+      <h3>🎲 ¿Quién responde?</h3>
+      <div class="mode-selector" id="modeSelector">
+        <button class="mode-btn active" data-mode="solo">👤 1 estudiante</button>
+        <button class="mode-btn" data-mode="pareja">👥 Pareja</button>
+        <button class="mode-btn" data-mode="equipo">🏆 Equipo</button>
+        <button class="mode-btn" data-mode="todos">🙌 Toda la clase</button>
+      </div>
+      <div class="roulette-display">
+        <div class="roulette-label" id="rouletteLabel">Presiona el botón</div>
+        <div class="roulette-result" id="rouletteResult">—</div>
+      </div>
+      <button class="btn" id="spinBtn">🎲 ¡Sortear!</button>
+      <div class="history" id="rouletteHistory">Historial: vacío</div>
+    </div>
+
+    <!-- 🆕 MESA DE JUEGO bajo la ruleta -->
+    <div class="game-table">
+
+      <div class="deck-zone">
+        <div class="deck-pile" id="deckPile"></div>
+        <div class="zone-label">Mazo</div>
+      </div>
+
+      <div class="discard-zone">
+        <div class="discard-table">
+          <div class="discard-label">🗂️ Cartas usadas</div>
+          <div class="discard-pile" id="discardPile">
+            <span class="discard-empty">Aún ninguna</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </aside>
+
+</main>
+
+ <script src="cartas.js"></script>
+  
+</body>
+</html>

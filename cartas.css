@@ -1,0 +1,1409 @@
+/* ============================================
+   ROMPEHIELOS CIENTÍFICOS v2 - Prof. Steve
+   Con ruleta, equipos y modo secreto
+   ============================================ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --color-bg: #0f172a;
+  --color-bg-2: #1e293b;
+  --color-text: #f1f5f9;
+  --color-accent: #fbbf24;
+  --color-success: #10b981;
+  --color-danger: #ef4444;
+  --color-secret: #7c3aed;
+  --shadow-card: 0 20px 60px rgba(0, 0, 0, 0.5);
+  --radius: 18px;
+  --transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-2) 100%);
+  background-attachment: fixed;
+  color: var(--color-text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(2px 2px at 20% 30%, white, transparent),
+    radial-gradient(1px 1px at 60% 70%, white, transparent),
+    radial-gradient(2px 2px at 80% 20%, #fbbf24, transparent),
+    radial-gradient(1px 1px at 40% 80%, white, transparent),
+    radial-gradient(2px 2px at 90% 60%, white, transparent);
+  background-size: 200px 200px;
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* HEADER */
+header {
+  text-align: center;
+  padding: 2rem 1rem 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+header h1 {
+  font-size: clamp(1.6rem, 4vw, 2.6rem);
+  background: linear-gradient(90deg, #fbbf24, #10b981, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+header p {
+  margin-top: 0.4rem;
+  opacity: 0.7;
+  font-size: 0.95rem;
+}
+
+/* BARRA DE CONFIGURACIÓN */
+.config-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  padding: 0.8rem 1.5rem;
+  margin: 0 auto 1rem;
+  max-width: fit-content;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.config-bar label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.config-bar input[type="number"] {
+  background: rgba(251, 191, 36, 0.15);
+  border: 2px solid rgba(251, 191, 36, 0.3);
+  color: var(--color-accent);
+  padding: 0.4rem 0.6rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: inherit;
+  width: 65px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.config-bar input[type="number"]:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  background: rgba(251, 191, 36, 0.25);
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2);
+}
+
+.config-bar input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+}
+
+.config-bar .divider {
+  width: 1px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+#resetHistoryBtn {
+  padding: 0.5rem 1rem !important;
+  font-size: 0.85rem !important;
+  border-radius: 25px !important;
+}
+
+/* SELECTOR DE BARAJAS */
+.deck-selector {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8rem;
+  max-width: 1300px;
+  margin: 1rem auto;
+  padding: 0 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.deck-btn {
+  flex: 0 1 220px;
+  min-width: 200px;
+}
+.deck-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-text);
+  padding: 1rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.deck-btn:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-accent);
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.deck-btn.active {
+  border-color: var(--color-accent);
+  background: rgba(251, 191, 36, 0.15);
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.3);
+}
+
+.deck-btn .icon { font-size: 1.8rem; flex-shrink: 0; }
+.deck-btn .info { display: flex; flex-direction: column; }
+.deck-btn .title { font-size: 0.95rem; font-weight: 700; }
+.deck-btn .subtitle { font-size: 0.7rem; opacity: 0.6; font-weight: 400; }
+
+/* PANEL ROTATIVO: CARTA + RULETA */
+.main-area {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  padding: 1rem 1rem 4rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 900px) {
+  .main-area { grid-template-columns: 1.2fr 1fr; align-items: start; }
+}
+
+/* CARTA */
+.card-stage { display: flex; flex-direction: column; align-items: center; }
+
+.card-container {
+  perspective: 1500px;
+  width: min(90vw, 460px);
+  height: 650px;
+  margin-bottom: 1.2rem;
+}
+.card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform var(--transition);
+  cursor: pointer;
+}
+
+.card.flipped { transform: rotateY(180deg); }
+
+.card-face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  padding: 1.8rem;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.card-back {
+  background: linear-gradient(135deg, #1e3a8a 0%, #6d28d9 50%, #be185d 100%);
+  align-items: center;
+  justify-content: space-around;
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+.card-back::before {
+  content: '';
+  position: absolute;
+  inset: 15px;
+  border: 3px dashed rgba(255, 255, 255, 0.3);
+  border-radius: calc(var(--radius) - 6px);
+  pointer-events: none;
+}
+/* ============================================
+   DORSO PREMIUM (estilo Gemini)
+   Símbolo griego + ícono Font Awesome + título
+   ============================================ */
+.card-back {
+  justify-content: space-evenly;
+  gap: 0.5rem;
+  padding: 2rem 1.5rem;
+}
+
+.card-back .deck-symbol {
+  font-family: 'Playfair Display', serif;
+  font-size: 9rem;
+  line-height: 1;
+  margin: 0;
+  z-index: 1;
+  transition: text-shadow 0.4s ease, transform 0.4s ease;
+}
+
+.card-back .card-back-icon {
+  font-size: 8rem;
+  margin: 0;
+  z-index: 1;
+  animation: float 3s ease-in-out infinite;
+  transition: filter 0.4s ease, transform 0.4s ease;
+}
+
+.card-back .card-back-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 2.4rem;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin: 0;
+  z-index: 1;
+  transition: text-shadow 0.4s ease, letter-spacing 0.4s ease;
+}
+
+.card-back .tap-hint {
+  margin: 0;
+  padding: 0.6rem 1.4rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  animation: pulse 2s infinite;
+  z-index: 1;
+  backdrop-filter: blur(8px);
+}
+
+
+
+.card-back h2 {
+  font-size: 2.2rem;
+  margin: 0;
+  font-weight: 800;
+  padding: 0 1rem;
+}
+
+.card-back .tap-hint {
+  margin: 0;
+  padding: 0.8rem 1.8rem;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  animation: pulse 2s infinite;
+}
+@keyframes float { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-10px);} }
+@keyframes pulse { 0%,100% {transform:scale(1);opacity:0.9;} 50% {transform:scale(1.05);opacity:1;} }
+
+.card-front {
+  transform: rotateY(180deg);
+  background: linear-gradient(160deg, #fefce8 0%, #fef3c7 100%);
+  color: #1f2937;
+  justify-content: space-between;
+}
+
+/* MODO SECRETO (Dígalo como pueda) */
+.card-front.secret {
+  background: linear-gradient(160deg, #1e1b4b 0%, #4c1d95 100%);
+  color: #fef3c7;
+}
+
+.card-front.secret .card-header { border-color: #fbbf24; }
+.card-front.secret .card-number { background: #fbbf24; color: #1e1b4b; }
+.card-front.secret .card-deck-name { color: #fbbf24; }
+.card-front.secret .card-footer { border-color: #fbbf24; color: #fbbf24; }
+
+.card-front .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px dashed #d97706;
+  padding-bottom: 0.7rem;
+  margin-bottom: 0.8rem;
+}
+
+.card-front .card-number {
+  background: #d97706;
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border-radius: 20px;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.card-front .card-deck-name {
+  font-size: 0.8rem;
+  color: #92400e;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.card-front .card-icon { font-size: 3.5rem; text-align: center; margin: 0.8rem 0; }
+
+.card-front .card-text {
+  font-size: 2.2rem;
+  line-height: 1.5;
+  text-align: center;
+  font-weight: 500;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: pre-line;
+}
+
+.card-front .card-footer {
+  text-align: center;
+  border-top: 2px dashed #d97706;
+  padding-top: 0.6rem;
+  font-size: 0.8rem;
+  color: #92400e;
+  font-style: italic;
+}
+
+/* CAJA DE RESPUESTA REVELADA */
+.answer-box {
+  background: rgba(16, 185, 129, 0.15);
+  border: 2px solid var(--color-success);
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  margin-top: 0.6rem;
+  font-size: 1rem;
+  color: #064e3b;
+  font-weight: 600;
+  background: #d1fae5;
+  white-space: pre-line;
+  animation: slideIn 0.4s ease;
+}
+
+@keyframes slideIn { from {opacity:0; transform:translateY(10px);} to {opacity:1;transform:translateY(0);} }
+
+/* CONTROLES */
+.controls {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+  background: var(--color-accent);
+  color: #1f2937;
+  border: none;
+  padding: 0.8rem 1.6rem;
+  border-radius: 30px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 5px 20px rgba(251, 191, 36, 0.3);
+}
+
+.btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(251, 191, 36, 0.5); }
+.btn:active { transform: translateY(0); }
+
+.btn.secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: none;
+}
+.btn.secondary:hover { background: rgba(255, 255, 255, 0.2); }
+
+.btn.success { background: var(--color-success); color: white; box-shadow: 0 5px 20px rgba(16,185,129,0.3); }
+.btn.success:hover { box-shadow: 0 8px 25px rgba(16,185,129,0.5); }
+
+.btn.hidden { display: none; }
+
+.counter { text-align: center; margin-top: 0.8rem; opacity: 0.6; font-size: 0.85rem; }
+
+/* PANEL DE RULETA */
+.roulette-panel {
+  background: linear-gradient(160deg, rgba(124, 58, 237, 0.15) 0%, rgba(190, 24, 93, 0.15) 100%);
+  border: 2px solid rgba(251, 191, 36, 0.25);
+  border-radius: var(--radius);
+  padding: 1.8rem 1.5rem;
+  backdrop-filter: blur(15px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  box-shadow: 0 10px 40px rgba(124, 58, 237, 0.2);
+}
+
+.roulette-panel h3 {
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.95;
+  background: linear-gradient(90deg, #fbbf24, #f472b6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+  text-align: center;
+  width: 100%;
+}
+
+.mode-selector {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  width: 100%;
+  justify-content: center;
+}
+
+.mode-btn {
+  background: rgba(255,255,255,0.05);
+  border: 2px solid rgba(255,255,255,0.15);
+  color: var(--color-text);
+  padding: 0.6rem 0.8rem;
+  border-radius: 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: center;
+}
+
+.mode-btn:hover {
+  background: rgba(255,255,255,0.12);
+  transform: translateY(-2px);
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.mode-btn.active {
+  background: linear-gradient(135deg, var(--color-accent) 0%, #f59e0b 100%);
+  color: #1f2937;
+  border-color: var(--color-accent);
+  font-weight: 800;
+  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
+  transform: translateY(-2px);
+}
+
+
+/* DISPLAY DEL RESULTADO */
+.roulette-display {
+  width: 100%;
+  min-height: 180px;
+  background: linear-gradient(135deg, #be185d 0%, #6d28d9 100%);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 1.8rem 1.2rem;
+  box-shadow:
+    inset 0 0 40px rgba(0,0,0,0.4),
+    0 0 0 2px rgba(251, 191, 36, 0.3),
+    0 0 30px rgba(190, 24, 93, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.roulette-display::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(251,191,36,0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(244,114,182,0.15) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.roulette-display > * { position: relative; z-index: 1; }
+
+
+.roulette-label {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 0.6rem;
+}
+
+.roulette-result {
+  font-size: 4rem;
+  font-weight: 900;
+  color: var(--color-accent);
+  text-shadow: 0 0 30px rgba(251,191,36,0.6);
+  font-family: 'Segoe UI', sans-serif;
+  letter-spacing: -2px;
+}
+
+.roulette-result.spinning {
+  animation: spin-numbers 0.08s linear infinite;
+}
+
+.roulette-result.team {
+  font-size: 2.2rem;
+  letter-spacing: 0;
+}
+
+.roulette-result.all {
+  font-size: 1.6rem;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+
+@keyframes spin-numbers {
+  0% { transform: translateY(-3px); opacity: 0.7; }
+  50% { transform: translateY(3px); opacity: 1; }
+  100% { transform: translateY(-3px); opacity: 0.7; }
+}
+
+.history {
+  width: 100%;
+  font-size: 0.7rem;
+  opacity: 0.4;
+  text-align: center;
+  min-height: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease, margin 0.3s ease;
+  margin: 0;
+}
+
+/* Solo aparece al pasar el mouse sobre el panel — invisible en proyector */
+.roulette-panel:hover .history {
+  max-height: 30px;
+  opacity: 0.5;
+  margin-top: 0.3rem;
+}
+
+/* IMPRESIÓN */
+@media print {
+  body { background: white; color: black; }
+  body::before, header, .config-bar, .deck-selector, .controls, .counter, .roulette-panel { display: none !important; }
+  .main-area { grid-template-columns: 1fr; }
+  .card-container { page-break-inside: avoid; }
+  .card { transform: rotateY(180deg); }
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .card-container { height: 500px; }
+  .card-front .card-text { font-size: 1.05rem; }
+  .roulette-result { font-size: 3rem; }
+}
+/* ============================================
+   IMÁGENES EN LAS CARTAS
+   ============================================ */
+.card-front .card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem 0 1.5rem;
+  min-height: 200px;
+}
+
+.card-front .card-icon img {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,0.25));
+  transition: transform 0.4s ease;
+}
+
+.card-front .card-icon img:hover {
+  transform: scale(1.05) rotate(-2deg);
+}
+
+/* Modo secreto: imagen invertida en color */
+.card-front.secret .card-icon img {
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,0.5)) brightness(0) invert(1) sepia(1) saturate(5) hue-rotate(10deg);
+}
+/* ============================================
+   7 TEMAS ÚNICOS — DORSO + FRENTE COORDINADOS
+   Cada mazo tiene identidad visual completa
+   ============================================ */
+
+/* ─────────────────────────────────────────
+   1. Α — OBSERVACIÓN
+   Violeta profundo + naranja neón + cyan
+   ───────────────────────────────────────── */
+.card-back.theme-alpha,
+.card-front.theme-alpha {
+  background: linear-gradient(135deg, rgba(60, 20, 80, 0.95), rgba(10, 10, 25, 0.98));
+  box-shadow: var(--shadow-card), inset 0 0 0 1px rgba(255,255,255,0.05);
+  font-family: 'Montserrat', sans-serif;
+}
+.card-back.theme-alpha::before,
+.card-front.theme-alpha::before {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border: 2px solid #FF6B00;
+  border-radius: 12px;
+  box-shadow: inset 0 0 15px rgba(255,107,0,0.3), 0 0 15px rgba(255,107,0,0.3);
+  pointer-events: none;
+  z-index: 0;
+}
+.card-back.theme-alpha .deck-symbol {
+  color: #FF6B00;
+  text-shadow: 0 0 20px rgba(255,107,0,0.6), 0 0 40px rgba(255,107,0,0.3);
+}
+.card-back.theme-alpha .card-back-icon {
+  color: #00F0FF;
+  filter: drop-shadow(0 0 15px rgba(0,240,255,0.5));
+}
+.card-back.theme-alpha .card-back-title {
+  color: #FFB300;
+  text-shadow: 0 0 15px rgba(255,179,0,0.5);
+}
+.card-front.theme-alpha { color: #e2e8f0; }
+.card-front.theme-alpha .card-header { border-color: #FF6B00; z-index: 1; }
+.card-front.theme-alpha .card-number { background: #FF6B00; color: #fff; z-index: 1; }
+.card-front.theme-alpha .card-deck-name { color: #00F0FF; text-shadow: 0 0 8px rgba(0,240,255,0.5); z-index: 1; }
+.card-front.theme-alpha .card-icon,
+.card-front.theme-alpha .card-text,
+.card-front.theme-alpha .card-footer { z-index: 1; position: relative; }
+.card-front.theme-alpha .card-text { color: #e2e8f0; text-shadow: 0 2px 5px rgba(0,0,0,1); }
+.card-front.theme-alpha .card-footer { border-color: #FF6B00; color: #FFB300; }
+
+/* ─────────────────────────────────────────
+   2. Σ — HIPÓTESIS
+   Cobalto futurista + grilla + verde neón
+   ───────────────────────────────────────── */
+.card-back.theme-sigma {
+  background: linear-gradient(45deg, #001f3f, #0074D9);
+  border: 2px solid #39CCCC;
+  box-shadow: 0 0 25px rgba(0,116,217,0.5);
+}
+.card-back.theme-sigma::before { display: none; }
+.card-back.theme-sigma .deck-symbol {
+  font-family: 'Orbitron', sans-serif;
+  color: #7FDBFF;
+  text-shadow: 0 0 15px #7FDBFF, 0 0 30px rgba(127,219,255,0.5);
+}
+.card-back.theme-sigma .card-back-icon {
+  color: #01FF70;
+  filter: drop-shadow(0 0 12px rgba(1,255,112,0.6));
+}
+.card-back.theme-sigma .card-back-title {
+  font-family: 'Orbitron', sans-serif;
+  color: #7FDBFF;
+  text-shadow: 0 0 10px #7FDBFF;
+}
+.card-front.theme-sigma {
+  background: #001a33;
+  background-image:
+    linear-gradient(rgba(127,219,255,0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(127,219,255,0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+  color: #01FF70;
+  font-family: 'Orbitron', sans-serif;
+  border: 2px solid #7FDBFF;
+  box-shadow: inset 0 0 20px rgba(0,116,217,0.4);
+}
+.card-front.theme-sigma .card-header { border-color: #7FDBFF; }
+.card-front.theme-sigma .card-number { background: #7FDBFF; color: #001a33; }
+.card-front.theme-sigma .card-deck-name { color: #39CCCC; text-shadow: 0 0 8px #01FF70; }
+.card-front.theme-sigma .card-text { color: #01FF70; text-shadow: 0 0 8px rgba(1,255,112,0.4); }
+.card-front.theme-sigma .card-footer { border-color: #7FDBFF; color: #39CCCC; }
+
+/* ─────────────────────────────────────────
+   3. Δ — MITO O CIENCIA
+   Dividido oscuro/claro + Cinzel
+   ───────────────────────────────────────── */
+/* ─────────────────────────────────────────
+   3. Δ — MITO O CIENCIA
+   Dividido oscuro/claro REAL + Cinzel
+   ───────────────────────────────────────── */
+.card-back.theme-delta {
+  background: linear-gradient(90deg, #1a1a2e 0%, #1a1a2e 50%, #f1f5f9 50%, #f1f5f9 100%);
+}
+.card-back.theme-delta::before { display: none; }
+
+/* Símbolo Δ partido en dos mediante clip-path */
+.card-back.theme-delta .deck-symbol {
+  font-family: 'Cinzel', serif;
+  position: relative;
+  color: transparent;
+  background: linear-gradient(90deg, #f1f5f9 0%, #f1f5f9 50%, #1a1a2e 50%, #1a1a2e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow: none;
+}
+.card-back.theme-delta .card-back-icon {
+  background: linear-gradient(90deg, #f1f5f9 0%, #f1f5f9 50%, #1a1a2e 50%, #1a1a2e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.card-back.theme-delta .card-back-title {
+  font-family: 'Cinzel', serif;
+  letter-spacing: 3px;
+  background: linear-gradient(90deg, #f1f5f9 0%, #f1f5f9 50%, #1a1a2e 50%, #1a1a2e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 800;
+}
+
+/* "Toca para revelar" también con contraste split */
+.card-back.theme-delta .tap-hint {
+  background: linear-gradient(90deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.25) 50%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.15) 100%);
+  border: 1px solid rgba(128,128,128,0.4);
+  color: transparent;
+  background-clip: padding-box;
+  position: relative;
+}
+.card-back.theme-delta .tap-hint::after {
+  content: 'Toca para revelar';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(90deg, #f1f5f9 0%, #f1f5f9 50%, #1a1a2e 50%, #1a1a2e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+/* Frente: papel cuadriculado claro */
+.card-front.theme-delta {
+  background: #f8fafc;
+  background-image:
+    linear-gradient(45deg, rgba(0,0,0,0.03) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.03) 75%),
+    linear-gradient(45deg, rgba(0,0,0,0.03) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.03) 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+  color: #0f172a;
+  font-family: 'Cinzel', serif;
+  border-left: 12px solid #1e293b;
+  border-right: 2px solid #cbd5e1;
+}
+.card-front.theme-delta .card-header { border-color: #1e293b; }
+.card-front.theme-delta .card-number { background: #1e293b; color: #f1f5f9; font-weight: 900; letter-spacing: 1px; }
+.card-front.theme-delta .card-deck-name { color: #1e293b; font-weight: 900; letter-spacing: 1px; }
+.card-front.theme-delta .card-text { color: #0f172a; font-weight: 700; }
+.card-front.theme-delta .card-footer { border-color: #1e293b; color: #1e293b; }
+
+
+/* ─────────────────────────────────────────
+   4. Ψ — ROLEPLAY
+   Tinción celular + verde neón + violeta
+   ───────────────────────────────────────── */
+/* ─────────────────────────────────────────
+   4. Ψ — ROLEPLAY
+   Negro + puntos rosa neón + borde cyan
+   ───────────────────────────────────────── */
+.card-back.theme-psi {
+  background: #0a0a1a;
+  background-image: radial-gradient(circle, rgba(255,0,255,0.6) 1.5px, transparent 1.5px);
+  background-size: 22px 22px;
+  border: 3px solid #00ffff;
+  box-shadow: 0 0 25px rgba(0,255,255,0.5), inset 0 0 30px rgba(255,0,255,0.15);
+}
+.card-back.theme-psi::before { display: none; }
+.card-back.theme-psi .deck-symbol {
+  font-family: 'Times New Roman', serif;
+  color: #ff1493;
+  text-shadow: 0 0 20px #ff1493, 0 0 40px rgba(255,20,147,0.6);
+}
+.card-back.theme-psi .card-back-icon {
+  color: #ffffff;
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.6));
+}
+.card-back.theme-psi .card-back-title {
+  color: #ffffff;
+  text-shadow: 0 0 12px rgba(255,0,255,0.8);
+  letter-spacing: 5px;
+  font-weight: 800;
+}
+
+/* Frente: mismo universo neón rosa/cyan sobre negro */
+.card-front.theme-psi {
+  background: #0a0a1a;
+  background-image: radial-gradient(circle, rgba(255,0,255,0.25) 1.5px, transparent 1.5px);
+  background-size: 22px 22px;
+  color: #ffffff;
+  font-family: 'VT323', monospace;
+  border: 3px solid #00ffff;
+  box-shadow: inset 0 0 20px rgba(255,0,255,0.2);
+}
+.card-front.theme-psi .card-text { font-size: 1.5rem; line-height: 1.4; }
+.card-front.theme-psi .card-header { border-color: #00ffff; border-bottom-style: dashed; }
+.card-front.theme-psi .card-number { background: #ff1493; color: #fff; }
+.card-front.theme-psi .card-deck-name { color: #00ffff; text-shadow: 0 0 6px rgba(0,255,255,0.6); }
+.card-front.theme-psi .card-text { color: #ffffff; text-shadow: 0 0 8px rgba(255,0,255,0.4); }
+.card-front.theme-psi .card-footer { border-color: #00ffff; color: #ff1493; border-top-style: dashed; }
+
+
+/* ─────────────────────────────────────────
+   5. Λ — CONEXIÓN
+   Matrix rosa/cyan + grilla neón
+   ───────────────────────────────────────── */
+.card-back.theme-lambda {
+  background: #000;
+  background-image: radial-gradient(circle, #ff00ff 1px, transparent 1px);
+  background-size: 20px 20px;
+  border: 2px solid #ff00ff;
+  box-shadow: 0 0 20px #ff00ff, inset 0 0 30px rgba(255,0,255,0.2);
+}
+.card-back.theme-lambda::before { display: none; }
+.card-back.theme-lambda .deck-symbol {
+  font-family: 'Space Mono', monospace;
+  color: #ff00ff;
+  text-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff;
+}
+.card-back.theme-lambda .card-back-icon {
+  color: #00ffff;
+  filter: drop-shadow(0 0 15px rgba(0,255,255,0.8));
+}
+.card-back.theme-lambda .card-back-title {
+  font-family: 'Space Mono', monospace;
+  color: #00ffff;
+  text-shadow: 0 0 10px rgba(0,255,255,0.7);
+}
+.card-front.theme-lambda {
+  background: #0a0a0a;
+  background-image:
+    linear-gradient(rgba(255,0,255,0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,0,255,0.15) 1px, transparent 1px);
+  background-size: 15px 15px;
+  color: #00ffff;
+  font-family: 'Space Mono', monospace;
+  border: 2px solid #ff00ff;
+  box-shadow: inset 0 0 15px rgba(255,0,255,0.2);
+}
+.card-front.theme-lambda .card-header { border-color: #00ffff; }
+.card-front.theme-lambda .card-number { background: #ff00ff; color: #0a0a0a; }
+.card-front.theme-lambda .card-deck-name { color: #00ffff; text-shadow: 0 0 5px #00ffff; }
+.card-front.theme-lambda .card-text { color: #ffffff; text-shadow: 0 0 8px rgba(255,0,255,0.6); }
+.card-front.theme-lambda .card-footer { border-color: #ff00ff; color: #00ffff; }
+
+/* ─────────────────────────────────────────
+   6. Ω — MISTERIO
+   Detective violeta + papel manila + sello rojo
+   ───────────────────────────────────────── */
+.card-back.theme-omega {
+  background: linear-gradient(to bottom, #2b0f4c, #130026);
+  border: 2px inset #592e83;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+}
+.card-back.theme-omega::before {
+  content: '';
+  position: absolute;
+  inset: 15px;
+  border: 2px dashed #592e83;
+  border-radius: calc(var(--radius) - 6px);
+  pointer-events: none;
+}
+.card-back.theme-omega .deck-symbol {
+  font-family: 'Special Elite', cursive;
+  color: #82589F;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+}
+.card-back.theme-omega .card-back-icon {
+  color: #d8b4e2;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6));
+}
+.card-back.theme-omega .card-back-title {
+  font-family: 'Special Elite', cursive;
+  color: #d8b4e2;
+  letter-spacing: 3px;
+}
+.card-front.theme-omega {
+  background: #e4d8c5;
+  color: #2b0f4c;
+  font-family: 'Special Elite', cursive;
+  border: 2px solid #b8a688;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.3);
+}
+.card-front.theme-omega .card-header { border-color: #2b0f4c; }
+.card-front.theme-omega .card-number {
+  background: transparent;
+  color: #a82020;
+  border: 3px solid #a82020;
+  border-radius: 5px;
+  padding: 0.2rem 0.6rem;
+  transform: rotate(-4deg);
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+.card-front.theme-omega .card-deck-name { color: #2b0f4c; font-weight: 800; }
+.card-front.theme-omega .card-text { color: #2b0f4c; }
+.card-front.theme-omega .card-footer { border-color: #2b0f4c; color: #2b0f4c; }
+
+/* ─────────────────────────────────────────
+   7. Φ — DÍGALO COMO PUEDA
+   Azul institucional + dorado elegante
+   ───────────────────────────────────────── */
+.card-back.theme-phi,
+.card-front.theme-phi {
+  background: linear-gradient(135deg, #001f3f, #003366, #004080);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(255,255,255,0.1);
+  border: none;
+  font-family: 'Montserrat', sans-serif;
+}
+.card-back.theme-phi::before,
+.card-front.theme-phi::before {
+  content: '';
+  position: absolute;
+  inset: 10px;
+  border: 1px solid #d4af37;
+  border-radius: 12px;
+  box-shadow: inset 0 0 10px rgba(212,175,55,0.15);
+  pointer-events: none;
+  z-index: 0;
+}
+.card-back.theme-phi .deck-symbol {
+  font-family: 'Playfair Display', serif;
+  color: #d4af37;
+  text-shadow: 2px 4px 8px rgba(0,0,0,0.7), 0 0 20px rgba(212,175,55,0.3);
+}
+.card-back.theme-phi .card-back-icon {
+  color: #f8f9fa;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6));
+}
+.card-back.theme-phi .card-back-title {
+  color: #d4af37;
+  letter-spacing: 6px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+}
+.card-front.theme-phi { color: #f8f9fa; }
+.card-front.theme-phi .card-header { border-color: rgba(212,175,55,0.5); z-index: 1; }
+.card-front.theme-phi .card-number { background: #d4af37; color: #050a15; z-index: 1; }
+.card-front.theme-phi .card-deck-name { color: #d4af37; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); z-index: 1; }
+.card-front.theme-phi .card-icon,
+.card-front.theme-phi .card-text,
+.card-front.theme-phi .card-footer { z-index: 1; position: relative; }
+.card-front.theme-phi .card-text { color: #f8f9fa; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
+.card-front.theme-phi .card-footer { border-color: rgba(212,175,55,0.5); color: #d4af37; }
+/* Énfasis universal en palabras clave */
+.card-front .card-text strong {
+  font-weight: 900;
+  color: inherit;
+  filter: brightness(1.15);
+  text-shadow: 0 0 8px currentColor;
+  letter-spacing: 0.5px;
+}
+.card-front.theme-delta .card-text strong { color: #a82020; text-shadow: none; }
+.card-front.theme-omega .card-text strong { color: #a82020; text-shadow: none; text-decoration: underline; }
+/* ============================================
+   MODO SECRETO — Layout 3 líneas
+   ============================================ */
+.card-front.secret .card-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 0.5rem;
+}
+
+.secret-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  opacity: 0.85;
+  text-align: center;
+}
+
+.secret-word {
+  font-size: 2.4rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-align: center;
+  color: #fbbf24;
+  text-shadow: 0 0 20px rgba(251, 191, 36, 0.5), 0 2px 8px rgba(0, 0, 0, 0.6);
+  line-height: 1.1;
+  padding: 0.5rem 1rem;
+  border-top: 2px solid rgba(251, 191, 36, 0.4);
+  border-bottom: 2px solid rgba(251, 191, 36, 0.4);
+}
+
+.secret-hint {
+  font-size: 1rem;
+  font-style: italic;
+  opacity: 0.85;
+  text-align: center;
+  letter-spacing: 0.5px;
+  line-height: 1.4;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .secret-word { font-size: 1.8rem; letter-spacing: 2px; }
+  .secret-label, .secret-hint { font-size: 0.9rem; }
+}
+/* ============================================
+   🎴 MAZO FÍSICO INTERACTIVO
+   ============================================ */
+.card-stage {
+  position: relative;
+  align-items: center;
+}
+
+/* Mazo apilado debajo de la carta principal — más natural y siempre visible */
+.deck-pile {
+  position: relative;
+  width: 140px;          /* antes 220 */
+  height: 180px;         /* antes 280 */
+  margin: 0;             /* antes 1.5rem auto 1rem */
+  perspective: 1200px;
+  z-index: 5;
+  flex-shrink: 0;
+}
+
+
+/* Cada carta apilada — hereda look del tema activo */
+.pile-card {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 180px;
+  width: 110px;          /* antes 180 */
+  height: 155px;         /* antes 250 */
+  margin-left: -55px;    /* antes -90 (mitad del width) */
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+  cursor: pointer;
+  transform-origin: bottom center;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  backface-visibility: hidden;
+  overflow: hidden;
+}
+
+/* Mini-back (visual del dorso de cada carta apilada) */
+.pile-card .mini-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.pile-card .mini-back::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 2px dashed rgba(255,255,255,0.25);
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+.pile-card .mini-symbol {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.6rem;
+  line-height: 1;
+  font-weight: 700;
+  z-index: 1;
+}
+
+.pile-card .mini-icon {
+  font-size: 1.3rem;
+  z-index: 1;
+}
+
+.pile-card .mini-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  z-index: 1;
+  text-align: center;
+}
+
+/* Hover: la carta de arriba se levanta y brilla */
+.pile-card:hover {
+  z-index: 999 !important;
+  box-shadow: 0 20px 40px rgba(251, 191, 36, 0.5),
+              0 0 0 2px var(--color-accent);
+}
+
+/* Estado: volando hacia el centro */
+.pile-card.flying {
+  pointer-events: none;
+  z-index: 1000;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s ease 0.4s;
+}
+
+/* Estado: ya se usó (oculta totalmente) */
+.pile-card.gone {
+  display: none !important;
+}
+
+/* ============================================
+   APLICAR TEMAS A LAS PILE-CARDS
+   ============================================ */
+.pile-card.theme-alpha .mini-back {
+  background: linear-gradient(135deg, rgba(60,20,80,0.95), rgba(10,10,25,0.98));
+  border: 2px solid #FF6B00;
+  color: #FFB300;
+}
+.pile-card.theme-alpha .mini-symbol { color: #FF6B00; text-shadow: 0 0 12px rgba(255,107,0,0.6); }
+.pile-card.theme-alpha .mini-icon { color: #00F0FF; }
+
+.pile-card.theme-sigma .mini-back {
+  background: linear-gradient(45deg, #001f3f, #0074D9);
+  border: 2px solid #39CCCC;
+  color: #7FDBFF;
+}
+.pile-card.theme-sigma .mini-symbol { font-family: 'Orbitron', sans-serif; color: #7FDBFF; text-shadow: 0 0 10px #7FDBFF; }
+.pile-card.theme-sigma .mini-icon { color: #01FF70; }
+
+.pile-card.theme-delta .mini-back {
+  background: linear-gradient(90deg, #1a1a2e 50%, #f1f5f9 50%);
+  color: #fff;
+}
+.pile-card.theme-delta .mini-symbol,
+.pile-card.theme-delta .mini-icon,
+.pile-card.theme-delta .mini-title { color: #fff; mix-blend-mode: difference; font-family: 'Cinzel', serif; }
+
+.pile-card.theme-psi .mini-back {
+  background: #0a0a1a;
+  background-image: radial-gradient(circle, rgba(255,0,255,0.6) 1px, transparent 1px);
+  background-size: 14px 14px;
+  border: 2px solid #00ffff;
+  color: #fff;
+}
+.pile-card.theme-psi .mini-symbol { color: #ff1493; text-shadow: 0 0 12px #ff1493; }
+.pile-card.theme-psi .mini-icon { color: #fff; }
+
+.pile-card.theme-lambda .mini-back {
+  background: #000;
+  background-image: radial-gradient(circle, #ff00ff 1px, transparent 1px);
+  background-size: 14px 14px;
+  border: 2px solid #ff00ff;
+  color: #00ffff;
+}
+.pile-card.theme-lambda .mini-symbol { font-family: 'Space Mono', monospace; color: #ff00ff; text-shadow: 0 0 10px #ff00ff; }
+.pile-card.theme-lambda .mini-icon { color: #00ffff; }
+
+.pile-card.theme-omega .mini-back {
+  background: linear-gradient(to bottom, #2b0f4c, #130026);
+  border: 2px solid #592e83;
+  color: #d8b4e2;
+}
+.pile-card.theme-omega .mini-symbol { font-family: 'Special Elite', cursive; color: #82589F; }
+.pile-card.theme-omega .mini-icon { color: #d8b4e2; }
+
+.pile-card.theme-phi .mini-back {
+  background: linear-gradient(135deg, #001f3f, #003366, #004080);
+  border: 1px solid #d4af37;
+  color: #d4af37;
+}
+.pile-card.theme-phi .mini-symbol { font-family: 'Playfair Display', serif; color: #d4af37; text-shadow: 0 0 12px rgba(212,175,55,0.4); }
+.pile-card.theme-phi .mini-icon { color: #f8f9fa; }
+
+/* Responsive: en pantallas muy pequeñas, mazo más compacto */
+@media (max-width: 600px) {
+  .deck-pile { width: 160px; height: 220px; }
+  .pile-card { width: 140px; height: 200px; margin-left: -70px; }
+  .pile-card .mini-symbol { font-size: 3rem; }
+}
+
+
+/* ============================================
+   🗂️ MINI-MESA DE CARTAS USADAS
+   ============================================ */
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.discard-table {
+  background: rgba(255,255,255,0.04);
+  border: 1px dashed rgba(255,255,255,0.15);
+  border-radius: var(--radius);
+  padding: 1rem;
+  min-height: 140px;
+  position: relative;
+  backdrop-filter: blur(8px);
+}
+
+.discard-label {
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.6;
+  text-align: center;
+  margin-bottom: 0.8rem;
+}
+
+.discard-pile {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+  min-height: 90px;
+  align-items: center;
+}
+
+.discard-empty {
+  font-size: 0.75rem;
+  opacity: 0.3;
+  font-style: italic;
+}
+
+/* Cada mini-carta en la pila de descartes */
+.discard-card {
+  width: 55px;
+  height: 78px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  font-size: 1rem;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  transform: rotate(var(--rot, 0deg));
+  animation: dropIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.discard-card:hover {
+  transform: rotate(0deg) translateY(-8px) scale(1.2);
+  z-index: 10;
+  box-shadow: 0 8px 20px rgba(251, 191, 36, 0.4),
+              0 0 0 2px var(--color-accent);
+}
+
+.discard-card.previewing {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.discard-card .mini-num {
+  font-size: 0.55rem;
+  opacity: 0.8;
+  font-family: 'Segoe UI', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+@keyframes dropIn {
+  0% { opacity: 0; transform: translateY(-200px) rotate(0deg) scale(1.5); }
+  60% { opacity: 1; transform: translateY(10px) rotate(var(--rot, 0deg)) scale(0.95); }
+  100% { opacity: 1; transform: rotate(var(--rot, 0deg)) scale(1); }
+}
+
+/* Indicador "viendo carta del historial" */
+.viewing-discard {
+  position: relative;
+}
+.viewing-discard::before {
+  content: '👁️ Vista previa del historial';
+  position: absolute;
+  top: -2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-accent);
+  color: #1f2937;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+  animation: slideIn 0.4s ease;
+  z-index: 100;
+}
+/* /* ============================================
+   🎴 MESA DE JUEGO: Mazo + Descarte (panel derecho)
+   ============================================ */
+.game-table {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  width: 100%;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius);
+  padding: 1rem;
+  backdrop-filter: blur(10px);
+}
+
+.game-table .deck-zone,
+.game-table .discard-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.game-table .zone-label {
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.6;
+  font-weight: 700;
+}
+
+.game-table .deck-pile { margin: 0; }
+
+.game-table .discard-table {
+  background: rgba(0,0,0,0.2);
+  border: 1px dashed rgba(255,255,255,0.12);
+  padding: 0.6rem;
+  min-height: 180px;
+  width: 220px;
+  max-width: 100%;
+}
+
+.game-table .discard-pile { min-height: 160px; }
+
+
