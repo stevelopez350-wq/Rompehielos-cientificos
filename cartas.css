@@ -1665,3 +1665,159 @@ header h1,
   -webkit-transform: rotateY(180deg);
   transform: rotateY(180deg);
 }
+/* ============================================
+   🎴 BOTONES DE BARAJA con estilo del dorso
+   Cada botón refleja la identidad visual de su mazo
+   ============================================ */
+
+.deck-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Patrón sutil de fondo en cada botón (heredado del dorso) */
+.deck-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.85;
+  z-index: 0;
+  transition: opacity 0.3s ease;
+}
+
+.deck-btn > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Hover: brilla con su color temático */
+.deck-btn:hover {
+  transform: translateY(-4px) scale(1.02);
+}
+
+.deck-btn:hover::before {
+  opacity: 1;
+}
+
+/* ─── Α — OBSERVACIÓN (violeta + naranja neón) ─── */
+.deck-btn.deck-alpha::before {
+  background: linear-gradient(135deg, rgba(60,20,80,0.95), rgba(10,10,25,0.98));
+  border: 2px solid #FF6B00;
+  border-radius: var(--radius);
+  box-shadow: inset 0 0 12px rgba(255,107,0,0.25);
+}
+.deck-btn.deck-alpha { border-color: #FF6B00 !important; color: #FFB300; }
+.deck-btn.deck-alpha .icon { color: #FF6B00; text-shadow: 0 0 12px rgba(255,107,0,0.6); }
+.deck-btn.deck-alpha .title { color: #FFB300; }
+.deck-btn.deck-alpha .subtitle { color: #00F0FF; opacity: 0.8; }
+.deck-btn.deck-alpha:hover { box-shadow: 0 8px 25px rgba(255,107,0,0.5); }
+.deck-btn.deck-alpha.active { box-shadow: 0 0 0 3px #FF6B00, 0 8px 25px rgba(255,107,0,0.6); }
+
+/* ─── Σ — HIPÓTESIS (cobalto + verde neón) ─── */
+.deck-btn.deck-sigma::before {
+  background: linear-gradient(45deg, #001f3f, #0074D9);
+  border: 2px solid #39CCCC;
+  border-radius: var(--radius);
+  box-shadow: inset 0 0 12px rgba(127,219,255,0.3);
+}
+.deck-btn.deck-sigma { border-color: #39CCCC !important; }
+.deck-btn.deck-sigma .icon { color: #01FF70; text-shadow: 0 0 10px rgba(1,255,112,0.6); }
+.deck-btn.deck-sigma .title { color: #7FDBFF; font-family: 'Orbitron', sans-serif; }
+.deck-btn.deck-sigma .subtitle { color: #39CCCC; opacity: 0.85; }
+.deck-btn.deck-sigma:hover { box-shadow: 0 8px 25px rgba(0,116,217,0.5); }
+.deck-btn.deck-sigma.active { box-shadow: 0 0 0 3px #7FDBFF, 0 8px 25px rgba(127,219,255,0.6); }
+
+/* ─── Δ — MITO O CIENCIA (split blanco/negro) ─── */
+.deck-btn.deck-delta::before {
+  background: linear-gradient(90deg, #1a1a2e 0%, #1a1a2e 50%, #f1f5f9 50%, #f1f5f9 100%);
+  border-radius: var(--radius);
+}
+.deck-btn.deck-delta { border-color: #64748b !important; }
+.deck-btn.deck-delta .icon {
+  background: linear-gradient(90deg, #f1f5f9 0%, #f1f5f9 50%, #1a1a2e 50%, #1a1a2e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  font-family: 'Cinzel', serif;
+}
+.deck-btn.deck-delta .title {
+  background: linear-gradient(90deg, #f1f5f9 0%, #f1f5f9 50%, #1a1a2e 50%, #1a1a2e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  font-family: 'Cinzel', serif;
+  font-weight: 800;
+}
+.deck-btn.deck-delta .subtitle {
+  background: linear-gradient(90deg, rgba(241,245,249,0.7) 0%, rgba(241,245,249,0.7) 50%, rgba(26,26,46,0.7) 50%, rgba(26,26,46,0.7) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.deck-btn.deck-delta:hover { box-shadow: 0 8px 25px rgba(100,116,139,0.5); }
+.deck-btn.deck-delta.active { box-shadow: 0 0 0 3px #fbbf24, 0 8px 25px rgba(251,191,36,0.5); }
+
+/* ─── Ψ — ROLEPLAY (negro + rosa neón + cyan) ─── */
+.deck-btn.deck-psi::before {
+  background: #0a0a1a;
+  background-image: radial-gradient(circle, rgba(255,0,255,0.5) 1px, transparent 1px);
+  background-size: 14px 14px;
+  border: 2px solid #00ffff;
+  border-radius: var(--radius);
+  box-shadow: inset 0 0 15px rgba(255,0,255,0.2);
+}
+.deck-btn.deck-psi { border-color: #00ffff !important; }
+.deck-btn.deck-psi .icon { color: #ff1493; text-shadow: 0 0 12px rgba(255,20,147,0.8); }
+.deck-btn.deck-psi .title { color: #ffffff; text-shadow: 0 0 8px rgba(255,0,255,0.5); letter-spacing: 1px; }
+.deck-btn.deck-psi .subtitle { color: #00ffff; opacity: 0.85; }
+.deck-btn.deck-psi:hover { box-shadow: 0 8px 25px rgba(0,255,255,0.5); }
+.deck-btn.deck-psi.active { box-shadow: 0 0 0 3px #ff1493, 0 8px 25px rgba(255,20,147,0.6); }
+
+/* ─── Λ — CONEXIONES (grilla rosa/cyan) ─── */
+.deck-btn.deck-lambda::before {
+  background: #000;
+  background-image: radial-gradient(circle, #ff00ff 1px, transparent 1px);
+  background-size: 14px 14px;
+  border: 2px solid #ff00ff;
+  border-radius: var(--radius);
+  box-shadow: inset 0 0 12px rgba(255,0,255,0.25);
+}
+.deck-btn.deck-lambda { border-color: #ff00ff !important; }
+.deck-btn.deck-lambda .icon { color: #00ffff; text-shadow: 0 0 12px rgba(0,255,255,0.8); }
+.deck-btn.deck-lambda .title { color: #00ffff; font-family: 'Space Mono', monospace; text-shadow: 0 0 6px rgba(0,255,255,0.5); }
+.deck-btn.deck-lambda .subtitle { color: #ff00ff; opacity: 0.85; font-family: 'Space Mono', monospace; }
+.deck-btn.deck-lambda:hover { box-shadow: 0 8px 25px rgba(255,0,255,0.5); }
+.deck-btn.deck-lambda.active { box-shadow: 0 0 0 3px #00ffff, 0 8px 25px rgba(0,255,255,0.6); }
+
+/* ─── Ω — MISTERIO (violeta detective) ─── */
+.deck-btn.deck-omega::before {
+  background: linear-gradient(to bottom, #2b0f4c, #130026);
+  border: 2px solid #592e83;
+  border-radius: var(--radius);
+  box-shadow: inset 0 0 15px rgba(89,46,131,0.3);
+}
+.deck-btn.deck-omega { border-color: #82589F !important; }
+.deck-btn.deck-omega .icon { color: #d8b4e2; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6)); }
+.deck-btn.deck-omega .title { color: #d8b4e2; font-family: 'Special Elite', cursive; letter-spacing: 1px; }
+.deck-btn.deck-omega .subtitle { color: #82589F; font-family: 'Special Elite', cursive; opacity: 0.9; }
+.deck-btn.deck-omega:hover { box-shadow: 0 8px 25px rgba(43,15,76,0.6); }
+.deck-btn.deck-omega.active { box-shadow: 0 0 0 3px #82589F, 0 8px 25px rgba(130,88,159,0.6); }
+
+/* ─── Φ — DÍGALO COMO PUEDA (azul + dorado) ─── */
+.deck-btn.deck-phi::before {
+  background: linear-gradient(135deg, #001f3f, #003366, #004080);
+  border: 1px solid #d4af37;
+  border-radius: var(--radius);
+  box-shadow: inset 0 0 12px rgba(212,175,55,0.2);
+}
+.deck-btn.deck-phi { border-color: #d4af37 !important; }
+.deck-btn.deck-phi .icon { color: #d4af37; text-shadow: 0 0 12px rgba(212,175,55,0.5); }
+.deck-btn.deck-phi .title { color: #d4af37; font-family: 'Playfair Display', serif; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+.deck-btn.deck-phi .subtitle { color: #f8f9fa; opacity: 0.85; }
+.deck-btn.deck-phi:hover { box-shadow: 0 8px 25px rgba(212,175,55,0.4); }
+.deck-btn.deck-phi.active { box-shadow: 0 0 0 3px #d4af37, 0 8px 25px rgba(212,175,55,0.6); 
+}
