@@ -1540,3 +1540,76 @@ header p {
   header p { display: none; }
 }
 
+/* ============================================
+   🍎 FIX PARA SAFARI / iOS
+   Soluciona el bug de background-clip: text
+   ============================================ */
+
+/* Asegurar que -webkit-background-clip funcione */
+header h1,
+.roulette-panel h3,
+.card-back.theme-delta .deck-symbol,
+.card-back.theme-delta .card-back-icon,
+.card-back.theme-delta .card-back-title,
+.card-back.theme-delta .tap-hint::after {
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Fallback específico para iOS Safari: si falla el clip, mostrar color sólido */
+@supports not (-webkit-background-clip: text) {
+  header h1 {
+    background: none;
+    color: #fbbf24;
+    -webkit-text-fill-color: #fbbf24;
+  }
+  .card-back.theme-delta .deck-symbol,
+  .card-back.theme-delta .card-back-icon,
+  .card-back.theme-delta .card-back-title {
+    background: none !important;
+    color: #f1f5f9 !important;
+    -webkit-text-fill-color: #f1f5f9 !important;
+  }
+}
+
+/* Detección específica de iOS para forzar legibilidad */
+@supports (-webkit-touch-callout: none) {
+  /* Esto solo se aplica en iOS Safari */
+  
+  /* Tema Delta: en iOS usa colores sólidos en lugar del split */
+  .card-back.theme-delta {
+    background: linear-gradient(135deg, #1a1a2e 0%, #4a4a6e 100%);
+  }
+  .card-back.theme-delta .deck-symbol {
+    background: none !important;
+    color: #fbbf24 !important;
+    -webkit-text-fill-color: #fbbf24 !important;
+    text-shadow: 0 0 15px rgba(251,191,36,0.5);
+  }
+  .card-back.theme-delta .card-back-icon {
+    background: none !important;
+    color: #f1f5f9 !important;
+    -webkit-text-fill-color: #f1f5f9 !important;
+  }
+  .card-back.theme-delta .card-back-title {
+    background: none !important;
+    color: #fbbf24 !important;
+    -webkit-text-fill-color: #fbbf24 !important;
+    text-shadow: 0 0 10px rgba(251,191,36,0.4);
+  }
+  .card-back.theme-delta .tap-hint {
+    background: rgba(251,191,36,0.15) !important;
+    border: 1px solid rgba(251,191,36,0.4);
+  }
+  .card-back.theme-delta .tap-hint::after {
+    background: none !important;
+    color: #fbbf24 !important;
+    -webkit-text-fill-color: #fbbf24 !important;
+  }
+
+  /* Asegurar legibilidad general en las cartas */
+  .card-front .card-text {
+    -webkit-text-fill-color: inherit;
+  }
+}
