@@ -1407,3 +1407,136 @@ header p {
 .game-table .discard-pile { min-height: 160px; }
 
 
+/* ============================================
+   📱 OPTIMIZACIÓN MÓVIL COMPLETA
+   ============================================ */
+
+/* Tablets y móviles grandes */
+@media (max-width: 900px) {
+  .main-area {
+    grid-template-columns: 1fr !important;
+    padding: 1rem 0.5rem 3rem;
+    gap: 1.5rem;
+  }
+
+  .right-panel {
+    order: 2;
+  }
+}
+
+/* Móviles */
+@media (max-width: 600px) {
+  /* HEADER más compacto */
+  header { padding: 1rem 0.5rem 0.5rem; }
+  header h1 { font-size: 1.4rem; }
+  header p { font-size: 0.8rem; }
+
+  /* BARRA DE CONFIG: en columna */
+  .config-bar {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.7rem 1rem;
+    border-radius: 20px;
+    max-width: 95%;
+  }
+  .config-bar .divider { display: none; }
+  .config-bar label { font-size: 0.8rem; }
+
+  /* SELECTOR DE BARAJAS más pequeño */
+  .deck-selector { gap: 0.5rem; padding: 0 0.8rem; }
+  .deck-btn {
+    flex: 1 1 calc(50% - 0.5rem);
+    min-width: 0;
+    padding: 0.7rem;
+    font-size: 0.8rem;
+  }
+  .deck-btn .icon { font-size: 1.3rem; }
+  .deck-btn .title { font-size: 0.8rem; }
+  .deck-btn .subtitle { font-size: 0.6rem; }
+
+  /* CARTA: tamaño contenido */
+  .card-container {
+    width: min(92vw, 360px);
+    height: 520px;
+    margin-bottom: 1rem;
+  }
+  .card-face { padding: 1.2rem; }
+
+  /* DORSO: símbolos e íconos más pequeños */
+  .card-back .deck-symbol { font-size: 5rem; }
+  .card-back .card-back-icon { font-size: 4rem; }
+  .card-back .card-back-title {
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+  }
+  .card-back .tap-hint { font-size: 0.75rem; padding: 0.4rem 1rem; }
+
+  /* FRENTE: texto más legible */
+  .card-front .card-number { font-size: 0.85rem; padding: 0.35rem 0.8rem; }
+  .card-front .card-deck-name { font-size: 0.7rem; }
+  .card-front .card-icon { min-height: 110px; margin: 0.5rem 0; }
+  .card-front .card-icon img { width: 110px; height: 110px; }
+  .card-front .card-text {
+    font-size: 1.2rem;
+    line-height: 1.35;
+  }
+  .card-front .card-footer { font-size: 0.7rem; padding-top: 0.4rem; }
+
+  /* MODO SECRETO en móvil */
+  .secret-word { font-size: 1.6rem; letter-spacing: 2px; }
+  .secret-label, .secret-hint { font-size: 0.85rem; }
+
+  /* CONTROLES */
+  .controls { gap: 0.4rem; }
+  .btn { padding: 0.7rem 1.2rem; font-size: 0.85rem; }
+
+  /* RULETA */
+  .roulette-panel { padding: 1.2rem 1rem; }
+  .roulette-panel h3 { font-size: 1rem; }
+  .mode-btn { font-size: 0.75rem; padding: 0.5rem 0.4rem; }
+  .roulette-result { font-size: 3rem; }
+  .roulette-result.team { font-size: 1.8rem; }
+  .roulette-result.all { font-size: 1.3rem; }
+
+  /* MESA DE JUEGO: apilada */
+  .game-table {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0.8rem;
+  }
+  .game-table .deck-pile {
+    width: 120px;
+    height: 160px;
+  }
+  .game-table .pile-card {
+    width: 100px;
+    height: 140px;
+    margin-left: -50px;
+  }
+  .game-table .pile-card .mini-symbol { font-size: 2.2rem; }
+  .game-table .pile-card .mini-icon { font-size: 1.1rem; }
+  .game-table .pile-card .mini-title { font-size: 0.5rem; }
+  .game-table .discard-table {
+    width: 100%;
+    min-height: 130px;
+  }
+  .discard-card { width: 45px; height: 64px; font-size: 0.85rem; }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 380px) {
+  .card-container { height: 480px; }
+  .card-front .card-text { font-size: 1rem; }
+  .card-back .deck-symbol { font-size: 4rem; }
+  .card-back .card-back-icon { font-size: 3.2rem; }
+  .deck-btn { flex: 1 1 100%; }
+}
+
+/* Pantallas ANCHAS en móvil (modo horizontal) */
+@media (max-height: 500px) and (orientation: landscape) {
+  .card-container { height: 90vh; max-height: 420px; }
+  header { padding: 0.5rem; }
+  header h1 { font-size: 1.2rem; }
+  header p { display: none; }
+}
+
