@@ -842,4 +842,65 @@ function clearDiscardPile() {
     // Inicializar
     loadDeck('observa');
     setMode('solo');
+
+
+/* ============================================
+   🐛 FIX: Cuadro blanco fantasma debajo de la mesa
+   ============================================ */
+
+/* 1. Asegurar que el body siempre tenga fondo oscuro hasta el final */
+html, body {
+  background: #0f172a;  /* Color base oscuro */
+  min-height: 100%;
+}
+
+html {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  background-attachment: fixed;
+}
+
+/* 2. Contener cualquier desborde del 3D transform */
+.card-container {
+  overflow: visible;
+  isolation: isolate;
+  contain: layout style;
+}
+
+.card {
+  -webkit-transform-origin: center center;
+  transform-origin: center center;
+}
+
+/* 3. Asegurar que las caras NO se desborden visualmente */
+.card-face {
+  overflow: hidden;
+  border-radius: var(--radius);
+  -webkit-mask-image: -webkit-radial-gradient(white, black); /* Hack iOS para respetar border-radius en 3D */
+}
+
+/* 4. Specíficamente para el tema Delta: evitar que su fondo claro se proyecte */
+.card-front.theme-delta {
+  isolation: isolate;
+  contain: paint;
+}
+
+/* 5. Padding inferior al main para que nunca quede espacio en blanco */
+.main-area {
+  padding-bottom: 5rem;
+  background: transparent;
+}
+
+/* 6. Forzar que el área visible siempre tenga el degradado oscuro */
+body::after {
+  content: '';
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  z-index: -2;
+  pointer-events: none;
+}
+
  
