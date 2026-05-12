@@ -842,7 +842,4 @@ function clearDiscardPile() {
     // Inicializar
     loadDeck('observa');
     setMode('solo');
-
-
-
  
